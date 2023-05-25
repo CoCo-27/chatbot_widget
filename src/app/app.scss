@@ -1,0 +1,213 @@
+$namespace: 'jeeves-chat-widget';
+$chatFrameHeight: 600px;
+
+@mixin iframe-wrapper {
+  position: relative;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+@mixin iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  outline: none;
+}
+
+.jeeves-chat-widget {
+  /*
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  width: 400px;
+  user-select: none;*/
+
+  &-chat-container {
+    @include iframe-wrapper;
+
+    width: 400px;
+    position: fixed;
+    bottom: 100px;
+    right: 15px;
+
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    height: 0;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.215, 0.61, 0.355, 1);
+
+    &.open {
+      height: $chatFrameHeight;
+      opacity: 1;
+      z-index: 999998;
+    }
+
+    iframe {
+      @include iframe;
+      border-radius: 10px;
+      height: $chatFrameHeight;
+    }
+
+    &.jeeves-chat-widget-chat-loaded {
+      .jeeves-chat-widget-chat-loader {
+        display: none;
+      }
+    }
+  }
+
+  &-chat-closer {
+    position: absolute;
+    top: 24px;
+    right: 15px;
+    color: rgb(255, 255, 255);
+    width: 28px;
+    height: 28px;
+    padding: 4px;
+    padding-left: 7px;
+    border-radius: 50%;
+    transition: all 0.25s;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.25);
+      opacity: 1;
+    }
+    &-icon {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &-hide-before-loaded {
+    .jeeves-chat-widget-chat-container {
+      iframe {
+        display: none;
+      }
+      &.jeeves-chat-widget-chat-loaded {
+        iframe {
+          display: block;
+        }
+      }
+    }
+  }
+
+  &-chat-loader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+
+    &-animation {
+      display: inline-block;
+      position: relative;
+      width: 80px;
+      height: 80px;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      div {
+        position: absolute;
+        border: 4px solid #fff;
+        opacity: 1;
+        border-radius: 50%;
+        animation: jeeves-chat-widget-loader-animation 1.5s
+          cubic-bezier(0, 0.2, 0.8, 1) infinite;
+
+        &:nth-child(2) {
+          animation-delay: -0.5s;
+        }
+      }
+      @keyframes jeeves-chat-widget-loader-animation {
+        0% {
+          top: 36px;
+          left: 36px;
+          width: 0;
+          height: 0;
+          opacity: 1;
+        }
+        100% {
+          top: 0px;
+          left: 0px;
+          width: 80px;
+          height: 80px;
+          opacity: 0;
+        }
+      }
+    }
+  }
+
+  &-notification-container {
+    @include iframe-wrapper;
+
+    position: fixed;
+    bottom: 15px;
+    right: 15px;
+    user-select: none;
+
+    transition: border 0.25s;
+    z-index: 999999;
+
+    margin-top: 10px;
+    width: 60px;
+    height: 60px;
+    margin-left: auto;
+    border-radius: 50%;
+
+    iframe {
+      @include iframe;
+      border-radius: 50%;
+    }
+  }
+
+  &-notification-toggle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border-radius: 50%;
+  }
+  &-notification-toggle-icon {
+    border-radius: 50%;
+    position: relative;
+    img {
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  &-use-notification-frame {
+    .jeeves-chat-widget-notification-container {
+      &.jeeves-chat-widget-notification-loaded {
+        .jeeves-chat-widget-notification-toggle {
+          .jeeves-chat-widget-notification-toggle-icon {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 767px), screen and (max-device-width: 767px) {
+  .jeeves-chat-widget-chat-container {
+    right: 0;
+    left: 0;
+    top: 0;
+    width: 100%;
+    iframe {
+      height: 100%;
+    }
+    &.open {
+      height: auto;
+    }
+  }
+}
